@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>TUI Calendar TEST!</title>
+      <meta charset="UTF-8" />
+      <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.css" />
+      <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
+      <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css">
+      <link rel="stylesheet" href="./styles/reset.css" />
+      <link rel="stylesheet" href="./styles/app.css" />
+      <link rel="stylesheet" href="./styles/icons.css" />
+   </head>
+   <body>
+      <nav class="navbar">
+         <div class="dropdown is-active">
+            <div class="dropdown-trigger">
+               <button class="button is-rounded" aria-haspopup="true" aria-controls="dropdown-menu">
+               <span class="button-text" id="selectedGroupEmail">Select Group Email</span>
+               <span class="dropdown-icon toastui-calendar-icon toastui-calendar-ic-dropdown-arrow"></span>
+               </button>
+            </div>
+            <div class="dropdown-menu" >
+               <div class="dropdown-content" id="groupEmailDropdown">
+               </div>
+            </div>
+         </div>
+         
+         <button class="button is-rounded today" id="today">Today</button>
+         <button class="button is-rounded prev">
+         <img alt="prev" id="prev" src="https://nhn.github.io/tui.calendar/latest/examples/images/ic-arrow-line-left.png">
+         </button>
+         <button class="button is-rounded next">
+         <img alt="next" id="next" src="https://nhn.github.io/tui.calendar/latest/examples/images/ic-arrow-line-right.png">
+         </button>
+         <span class="navbar--range"></span>
+         <button class="button is-rounded" id="all">All</button>
+      </nav>
+      <div id="app" style="height: 750px;"></div>
+      <script src="./bundle.js"></script>
+      <script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js"></script>
+   </body>
+</html>

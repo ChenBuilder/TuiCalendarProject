@@ -1,0 +1,29 @@
+{
+  "name": "toast-yi-calendar-for-test",
+  "version": "1.0.0",
+  "description": "None",
+  "main": "./",
+  "scripts": {
+    "start": "webpack serve",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "LC Test",
+  "license": "ISC",
+  "dependencies": {
+    "@toast-ui/calendar": "^2.1.3",
+    "chance": "^1.1.8",
+    "moment": "^2.29.4",
+    "tui-code-snippet": "^2.3.3",
+    "tui-date-picker": "^4.3.3",
+    "tui-time-picker": "^2.1.6"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.22.20",
+    "babel-loader": "^9.1.3",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}
