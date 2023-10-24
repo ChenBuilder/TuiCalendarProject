@@ -5,7 +5,10 @@ import bodyParser from 'body-parser';
 import eventRoutes from './routes/event.js';
 
 
-const mongoURI = 'mongodb://127.0.0.1:27017/calendar_db';
+const mongoURI = 'mongodb://mongodb:27017/calendar_db';
+
+// const mongoURI = 'mongodb://lc404:lc404@mongodb:27017/calendar_db';
+
 
 // Connect to the MongoDB database
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
