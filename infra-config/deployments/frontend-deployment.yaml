@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tui-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tui-frontend
+  template:
+    metadata:
+      labels:
+        app: tui-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: asia.gcr.io/rchin-project-32261/tui-frontend:v2.0
+        ports:
+        - containerPort: 8080
