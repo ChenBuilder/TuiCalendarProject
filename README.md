@@ -41,8 +41,8 @@ Use TUI Calendar to display GWS group member calendar event.
 │  │   ├── webpack.config.cjs</br>
 │  │   └── Dockerfile</br>
 │  ├── .env</br>
-│  ├── docker-composes.yaml</br>
-│  └── README.md(current file)</br>
-
+│  └── docker-composes.yaml</br>
+├── .gitignore</br>
+└── README.md(current file)</br>
 1. Not to commit the .env file to your source control (add .env to your .gitignore file). <- only for local test</br>
 2. use Kubernetes manifests instead of docker-compose.yml</br>
