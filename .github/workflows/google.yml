@@ -1,0 +1,91 @@
+# This workflow will build a docker container, publish it to Google Container Registry, and deploy it to GKE when there is a push to the "master" branch.
+#
+# To configure this workflow:
+#
+# 1. Ensure that your repository contains the necessary configuration for your Google Kubernetes Engine cluster, including deployment.yml, kustomization.yml, service.yml, etc.
+#
+# 2. Create and configure a Workload Identity Provider for GitHub (https://github.com/google-github-actions/auth#setting-up-workload-identity-federation)
+#
+# 3. Change the values for the GAR_LOCATION, GKE_ZONE, GKE_CLUSTER, IMAGE, REPOSITORY and DEPLOYMENT_NAME environment variables (below).
+#
+# For more support on how to run the workflow, please visit https://github.com/google-github-actions/setup-gcloud/tree/master/example-workflows/gke-kustomize
+
+name: Build and Deploy to GKE
+
+on:
+  push:
+    branches:
+      - master  # Set this to the branch you want to deploy from
+
+env:
+  # PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  PROJECT_ID: rchin-project-32261
+  GCR_LOCATION: asia  # The location of your GCR, 'asia' is for the multi-region GCR
+  GKE_CLUSTER: tui-autopilot-cluster  # Your cluster name
+  GKE_ZONE: asia-northeast1  # Use the region for a regional cluster
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v0.4.0'
+      with:
+        workload_identity_provider: 'projects/586279175059/locations/global/workloadIdentityPools/tui-autocluster-pool/providers/my-provider-github'
+        service_account: 'tui-autocluster-sa@rchin-project-32261.iam.gserviceaccount.com'
+
+    - name: Set up GKE credentials
+      run: |-
+        gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --region ${{ env.GKE_ZONE }} --project ${{ env.PROJECT_ID }}
+
+    # Build and push backend image
+    - name: Build backend image
+      run: |-
+        docker build -t asia.gcr.io/${{ env.PROJECT_ID }}/tui-backend:${{ github.sha }} ./src/backend/
+
+    - name: Push backend image
+      run: |-
+        echo ${{ secrets.GCR_SERVICE_ACCOUNT_KEY }} | docker login -u _json_key --password-stdin https://asia.gcr.io
+        docker push asia.gcr.io/${{ env.PROJECT_ID }}/tui-backend:${{ github.sha }}
+
+    # Build and push frontend image
+    - name: Build frontend image
+      run: |-
+        docker build -t asia.gcr.io/${{ env.PROJECT_ID }}/tui-frontend:${{ github.sha }} ./src/frontend/
+
+    - name: Push frontend image
+      run: |-
+        echo ${{ secrets.GCR_SERVICE_ACCOUNT_KEY }} | docker login -u _json_key --password-stdin https://asia.gcr.io
+        docker push asia.gcr.io/${{ env.PROJECT_ID }}/tui-frontend:${{ github.sha }}
+
+    # Apply backend service
+    - name: Deploy backend service
+      run: |-
+        kubectl apply -f ./infra-config/services/backend-service.yaml
+        
+    # Apply frontend service
+    - name: Deploy frontend service
+      run: |-
+        kubectl apply -f ./infra-config/services/frontend-service.yaml  
+
+    # Deploy backend to GKE                                       kubectl set image deployment/<deployment-name> <container-name>=<new-image>
+    # Watch the rollout status of the update to your deploymen    kubectl rollout status deployment/<deployment-name>                           
+    - name: Deploy backend
+      run: |-
+        kubectl set image deployment/tui-backend backend=asia.gcr.io/${{ env.PROJECT_ID }}/tui-backend:${{ github.sha }}
+        kubectl rollout status deployment/tui-backend
+
+    # Deploy frontend to GKE
+    - name: Deploy frontend
+      run: |-
+        kubectl set image deployment/tui-frontend frontend=asia.gcr.io/${{ env.PROJECT_ID }}/tui-frontend:${{ github.sha }}
+        kubectl rollout status deployment/tui-frontend
