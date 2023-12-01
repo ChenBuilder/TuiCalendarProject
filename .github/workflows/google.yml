@@ -46,30 +46,29 @@ jobs:
       run: |-
         gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --region ${{ env.GKE_ZONE }} --project ${{ env.PROJECT_ID }}
 
-    # Build and push backend image
-    - name: Build backend image
-      run: |-
-        docker build -t asia.gcr.io/${{ env.PROJECT_ID }}/tui-backend:${{ github.sha }} ./src/backend/
-
-    - name: Push backend image
-      # run: |-
-      #   docker login -u _json_key --password-stdin https://asia.gcr.io
-      #   docker push asia.gcr.io/${{ env.PROJECT_ID }}/tui-backend:${{ github.sha }}
-  
-      run: |
-        echo ${{ secrets.GCR_SERVICE_ACCOUNT_KEY }} | docker login -u _json_key --password-stdin gcr.io
-
-
-
-
-    # Build and push frontend image
+    # Build frontend image
     - name: Build frontend image
       run: |-
         docker build -t asia.gcr.io/${{ env.PROJECT_ID }}/tui-frontend:${{ github.sha }} ./src/frontend/
 
+    # Build backend image
+    - name: Build backend image
+      run: |-
+        docker build -t asia.gcr.io/${{ env.PROJECT_ID }}/tui-backend:${{ github.sha }} ./src/backend/
+  
+    - name: Login to GCR
+      uses: docker/login-action@v3
+      with:
+        registry: asia.gcr.io
+        username: 'oauth2accesstoken'
+        password: ${{ steps.auth.outputs.access_token }}
+
+    - name: Push backend image
+      run: |-
+        docker push asia.gcr.io/${{ env.PROJECT_ID }}/tui-backend:${{ github.sha }}
+
     - name: Push frontend image
       run: |-
-        echo ${{ secrets.GCR_SERVICE_ACCOUNT_KEY }} | docker login -u _json_key --password-stdin https://asia.gcr.io
         docker push asia.gcr.io/${{ env.PROJECT_ID }}/tui-frontend:${{ github.sha }}
 
     # Apply backend service
