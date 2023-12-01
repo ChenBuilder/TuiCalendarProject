@@ -41,7 +41,7 @@ jobs:
       uses: 'google-github-actions/auth@v0.4.0'
       with:
         workload_identity_provider: 'projects/586279175059/locations/global/workloadIdentityPools/tui-autopilot-cluster-pool/providers/github'
-        service_account: 'tui-autopilot-cluster-pool-sa@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
+        service_account: 'tui-autopilot-cluster-pool-sa@rchin-project-32261.iam.gserviceaccount.com	'
 
     - name: Set up GKE credentials
       run: |-
