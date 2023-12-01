@@ -58,7 +58,7 @@ jobs:
       #   docker push asia.gcr.io/${{ env.PROJECT_ID }}/tui-backend:${{ github.sha }}
   
       run: |
-        cat ${GOOGLE_APPLICATION_CREDENTIALS} | docker login -u _json_key --password-stdin gcr.io
+        cat ${{ secrets.GCR_SERVICE_ACCOUNT_KEY }} | docker login -u _json_key --password-stdin gcr.io
 
 
     # Build and push frontend image
