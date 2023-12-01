@@ -66,14 +66,25 @@ jobs:
         echo ${{ secrets.GCR_SERVICE_ACCOUNT_KEY }} | docker login -u _json_key --password-stdin https://asia.gcr.io
         docker push asia.gcr.io/${{ env.PROJECT_ID }}/tui-frontend:${{ github.sha }}
 
-    # Deploy backend to GKE
+    # Apply backend service
+    - name: Deploy backend service
+      run: |-
+        kubectl apply -f ./infra-config/services/backend-service.yaml
+        
+    # Apply frontend service
+    - name: Deploy frontend service
+      run: |-
+        kubectl apply -f ./infra-config/services/frontend-service.yaml  
+
+    # Deploy backend to GKE                                       kubectl set image deployment/<deployment-name> <container-name>=<new-image>
+    # Watch the rollout status of the update to your deploymen    kubectl rollout status deployment/<deployment-name>                           
     - name: Deploy backend
       run: |-
-        kubectl set image deployment/backend-deployment backend=asia.gcr.io/${{ env.PROJECT_ID }}/tui-backend:${{ github.sha }}
-        kubectl rollout status deployment/backend-deployment
+        kubectl set image deployment/tui-backend backend=asia.gcr.io/${{ env.PROJECT_ID }}/tui-backend:${{ github.sha }}
+        kubectl rollout status deployment/tui-backend
 
     # Deploy frontend to GKE
     - name: Deploy frontend
       run: |-
-        kubectl set image deployment/frontend-deployment frontend=asia.gcr.io/${{ env.PROJECT_ID }}/tui-frontend:${{ github.sha }}
-        kubectl rollout status deployment/frontend-deployment
+        kubectl set image deployment/tui-frontend frontend=asia.gcr.io/${{ env.PROJECT_ID }}/tui-frontend:${{ github.sha }}
+        kubectl rollout status deployment/tui-frontend
