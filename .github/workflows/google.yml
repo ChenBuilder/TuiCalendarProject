@@ -43,7 +43,15 @@ jobs:
         .token_format: access_token
         workload_identity_provider: 'projects/586279175059/locations/global/workloadIdentityPools/tui-autocluster-pool/providers/my-provider-github'
         service_account: 'tui-autocluster-sa@rchin-project-32261.iam.gserviceaccount.com'
+        
+    - name: Install gke-gcloud-auth-plugin
+      run: gcloud components install gke-gcloud-auth-plugin
 
+    - name: Update gcloud and kubectl
+      run: |
+        gcloud components update
+        gcloud components install kubectl
+  
     - name: Set up GKE credentials
       run: |-
         gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --region ${{ env.GKE_ZONE }} --project ${{ env.PROJECT_ID }}
@@ -53,7 +61,7 @@ jobs:
       with:
         registry: asia.gcr.io
         username: _json_key
-        password: ${{ secrets.GCR_SERVICE_ACCOUNT_KEY }}
+        password: ${{ secrets.GCR_SERVICE_ACCOUNT_KEY }}      
 
     # Build and push image
     - name: Build frontend image
@@ -72,6 +80,14 @@ jobs:
       run: |-
         docker push asia.gcr.io/${{ env.PROJECT_ID }}/tui-backend:${{ github.sha }}
 
+    - name: Deploy frontend deployment
+      run: |-
+        kubectl apply -f ./infra-config/deployments/frontend-deployment.yaml
+        
+    - name: Deploy backend deployment
+      run: |-
+        kubectl apply -f ./infra-config/deployments/backend-deployment.yaml
+        
     - name: Deploy backend service
       run: |-
         kubectl apply -f ./infra-config/services/backend-service.yaml
