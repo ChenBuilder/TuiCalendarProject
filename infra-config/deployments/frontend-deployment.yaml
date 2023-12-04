@@ -16,4 +16,4 @@ spec:
       - name: frontend
         image: asia.gcr.io/rchin-project-32261/tui-frontend:v2.0
         ports:
-        - containerPort: 8080
+        - containerPort: 8080 # The port Nginx within the container is listening on.

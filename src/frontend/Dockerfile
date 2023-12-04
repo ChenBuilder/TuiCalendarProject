@@ -1,5 +1,4 @@
 # Stage 1: Build the application
-#
 FROM node:14 AS builder
 
 WORKDIR /usr/src/app
@@ -10,13 +9,13 @@ RUN npm install
 
 COPY . .
 
-RUN chmod +x ./node_modules/.bin/webpack && npm run build
+RUN npm run build
 
 # Stage 2: Serve the application from Nginx
 FROM nginx:alpine
 
 # Copy built assets from builder stage to nginx server
-COPY --from=builder /usr/src/app/src /usr/share/nginx/html
+COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
 
 # Create a custom Nginx configuration file
 RUN echo "server { listen 8080; root /usr/share/nginx/html; index index.html; }" > /etc/nginx/conf.d/default.conf

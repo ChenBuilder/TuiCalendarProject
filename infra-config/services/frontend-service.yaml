@@ -7,6 +7,6 @@ spec:
     app: tui-frontend
   ports:
   - protocol: TCP
-    port: 80
-    targetPort: 8080
+    port: 80  # The port the service is exposed on.
+    targetPort: 8080  # The container port Nginx is listening on.
   type: LoadBalancer
