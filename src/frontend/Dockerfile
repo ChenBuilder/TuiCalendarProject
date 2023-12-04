@@ -9,7 +9,7 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+RUN chmod +x ./node_modules/.bin/webpack && npm run build
 
 # Stage 2: Serve the application from Nginx
 FROM nginx:alpine
