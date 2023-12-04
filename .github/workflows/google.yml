@@ -19,7 +19,7 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GCR_LOCATION: asia  # The location of your GCR, 'asia' is for the multi-region GCR
+  GCR_LOCATION: asia.gcr.io  # The location of your GCR, 'asia' is for the multi-region GCR
   GKE_CLUSTER: tui-autopilot-cluster  # Your cluster name
   GKE_ZONE: asia-northeast1  # Use the region for a regional cluster
 
@@ -40,6 +40,7 @@ jobs:
       id: auth
       uses: 'google-github-actions/auth@v0.4.0'
       with:
+        .token_format: access_token
         workload_identity_provider: 'projects/586279175059/locations/global/workloadIdentityPools/tui-autocluster-pool/providers/my-provider-github'
         service_account: 'tui-autocluster-sa@rchin-project-32261.iam.gserviceaccount.com'
 
