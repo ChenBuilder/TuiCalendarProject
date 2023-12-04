@@ -1,4 +1,5 @@
 # Stage 1: Build the application
+#
 FROM node:14 AS builder
 
 WORKDIR /usr/src/app
