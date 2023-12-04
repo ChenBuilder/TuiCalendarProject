@@ -51,7 +51,7 @@ jobs:
     - name: Login to GCR
       uses: docker/login-action@v3
       with:
-        registry: gcr.io
+        registry: asia.gcr.io
         username: _json_key
         password: ${{ secrets.GCR_SERVICE_ACCOUNT_KEY }}
 
@@ -59,6 +59,10 @@ jobs:
     - name: Build frontend image
       run: |-
         docker build -t asia.gcr.io/${{ env.PROJECT_ID }}/tui-frontend:${{ github.sha }} ./src/frontend/
+        
+    - name: Push frontend image
+      run: |-
+        docker push asia.gcr.io/${{ env.PROJECT_ID }}/tui-frontend:${{ github.sha }}
 
     - name: Build backend image
       run: |-
@@ -67,10 +71,6 @@ jobs:
     - name: Push backend image
       run: |-
         docker push asia.gcr.io/${{ env.PROJECT_ID }}/tui-backend:${{ github.sha }}
-
-    - name: Push frontend image
-      run: |-
-        docker push asia.gcr.io/${{ env.PROJECT_ID }}/tui-frontend:${{ github.sha }}
 
     - name: Deploy backend service
       run: |-
