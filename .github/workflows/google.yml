@@ -45,15 +45,7 @@ jobs:
         service_account: 'tui-autocluster-sa@rchin-project-32261.iam.gserviceaccount.com'
 
     - name: Install gke-gcloud-auth-plugin
-      # run: |
-      #   sudo apt-get update
-      #   sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin  
       uses: simenandre/setup-gke-gcloud-auth-plugin@v1
-
-    - name: Update gcloud and kubectl
-      run: |
-        gcloud components update
-        gcloud components install kubectl
   
     - name: Set up GKE credentials
       run: |-
