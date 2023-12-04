@@ -1,20 +1,27 @@
-# Use the official Node.js image as a base image
-FROM node:14
+# Stage 1: Build the application
+FROM node:14 AS builder
 
-# Set the working directory in the Docker container
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json files to the container
 COPY package*.json ./
 
-# Install the dependencies inside the container
 RUN npm install
 
-# Copy the rest of the files to the container
 COPY . .
 
-# Expose port (whatever port your frontend runs on, e.g., 8080). Adjust as per your configuration.
+RUN npm run build
+
+# Stage 2: Serve the application from Nginx
+FROM nginx:alpine
+
+# Copy built assets from builder stage to nginx server
+COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
+
+# Create a custom Nginx configuration file
+RUN echo "server { listen 8080; root /usr/share/nginx/html; index index.html; }" > /etc/nginx/conf.d/default.conf
+
+# Expose port 8080
 EXPOSE 8080
 
-# Command to start the frontend
-CMD ["npx", "webpack", "serve"]
+# Start Nginx and serve the application
+CMD ["nginx", "-g", "daemon off;"]
