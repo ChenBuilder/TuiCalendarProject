@@ -21,7 +21,7 @@ COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
 RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy a new configuration file from your repo
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d
 
 
 # Expose port 8080
