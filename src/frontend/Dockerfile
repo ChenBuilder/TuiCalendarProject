@@ -17,8 +17,14 @@ FROM nginx:alpine
 # Copy built assets from builder stage to nginx server
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
 
-# This should be the path to the main nginx.conf file if you are replacing the entire configuration.
-COPY nginx.conf /etc/nginx/nginx.conf
+# Remove the default Nginx configuration file
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copy a new configuration file from your repo
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# # This should be the path to the main nginx.conf file if you are replacing the entire configuration.
+# COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expose port 8080
 EXPOSE 8080
