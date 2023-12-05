@@ -151,7 +151,7 @@ calendar.render();
 trigger.addEventListener("click", () => {
   const [startDate, endDate] = getLocaltTime();
   group_dropdown.innerHTML = '';
-  const apiUrl = `http://localhost:3000/api/groups`;
+  const apiUrl = `http://tui-backend:3000/api/groups`;
 
   fetch(apiUrl)
     .then((response) => {
@@ -176,7 +176,7 @@ trigger.addEventListener("click", () => {
           const groupName = this.dataset.viewName; 
           selectedTextElement.textContent = groupName;
       
-          const groupeEventUrl = `http://localhost:3000/api/groupsevents?groupEmail=${groupName}&minTime=${startDate}&maxTime=${endDate}`;
+          const groupeEventUrl = `http://tui-backend:3000/api/groupsevents?groupEmail=${groupName}&minTime=${startDate}&maxTime=${endDate}`;
           fetch(groupeEventUrl)
           .then((response) => {
             if (!response.ok) {
@@ -231,7 +231,7 @@ next.addEventListener('click', function () {
 function displayEvents(){
   //Retrieve all event in current clendar range event.d 
   const [startDate, endDate] = getLocaltTime();
-  const apiUrl = `http://localhost:3000/api/events?minTime=${startDate}&maxTime=${endDate}`; 
+  const apiUrl = `http://tui-backend:3000/api/events?minTime=${startDate}&maxTime=${endDate}`; 
   // Make an HTTP GET request to retrieve data
   fetch(apiUrl)
     .then((response) => {
@@ -252,7 +252,7 @@ function displayEvents(){
 function displayMemberEvents(){
   const groupName = selectedTextElement.textContent
   const [startDate, endDate] = getLocaltTime();
-  const groupeEventUrl = `http://localhost:3000/api/groupsevents?groupEmail=${groupName}&minTime=${startDate}&maxTime=${endDate}`;
+  const groupeEventUrl = `http://tui-backend:3000/api/groupsevents?groupEmail=${groupName}&minTime=${startDate}&maxTime=${endDate}`;
   fetch(groupeEventUrl)
   .then((response) => {
     if (!response.ok) {
