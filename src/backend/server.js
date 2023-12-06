@@ -4,7 +4,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import eventRoutes from './routes/event.js';
 
-// Determine if we are in a production environment
+// Determine if we are in a production environmentac
 const isProduction = process.env.NODE_ENV === 'production';
 
 // Use dotenv only in development
@@ -42,13 +42,17 @@ process.on('SIGINT', () => {
 
 
 const app = express();
+
+// CORS Configuration for Production
+// const corsOptions = isProduction ? { origin: 'https://yourproductiondomain.com', optionsSuccessStatus: 200 } : {};
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/', eventRoutes);
 
 // Start the Express server
 const port = process.env.MONGO_PORT || 3000;
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on port ${port}`);
 });
 
