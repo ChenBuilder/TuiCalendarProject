@@ -73,5 +73,5 @@ const __dirname = path.dirname(__filename);
 const parentDirectory = path.resolve(__dirname, '..');
 dotenv.config({ path: `${parentDirectory}/.env` });
 
-const mongoURI = process.env.MONGO_URI || 'mongodb+srv://lc404:lc404@tuimongocluster.nxl9eie.mongodb.net/?retryWrites=true&w=majoritys'
+const mongoURI = process.env.MONGO_URI || 'mongodb+srv://lc404:lc404@tuimongocluster.nxl9eie.mongodb.net/calendar_db?retryWrites=true&w=majority'
 */
