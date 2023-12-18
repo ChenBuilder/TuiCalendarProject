@@ -27,3 +27,5 @@ spec:
               secretKeyRef:
                 name: mongo-secret
                 key: uri
+      imagePullSecrets:
+      - name: gcr-json-key

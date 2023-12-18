@@ -17,3 +17,5 @@ spec:
         image: asia.gcr.io/rchin-project-32261/tui-frontend:TAG_PLACEHOLDER
         ports:
         - containerPort: 8080 # The port Nginx within the container is listening on.
+      imagePullSecrets:
+      - name: gcr-json-key
