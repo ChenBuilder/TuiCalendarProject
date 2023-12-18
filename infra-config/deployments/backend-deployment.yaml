@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: asia.gcr.io/rchin-project-32261/tui-backend:v2.0
+          image: asia.gcr.io/rchin-project-32261/tui-backend:TAG_PLACEHOLDER
           ports:
             - containerPort: 3000
           env:

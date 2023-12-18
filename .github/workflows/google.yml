@@ -75,6 +75,14 @@ jobs:
       run: |-
         docker push asia.gcr.io/${{ env.PROJECT_ID }}/tui-backend:${{ github.sha }}
 
+    - name: Replace image tag placeholder in frontend deployment
+      run: |-
+        sed -i "s|tui-frontend:TAG_PLACEHOLDER|tui-frontend:${{ github.sha }}|g" ./infra-config/deployments/frontend-deployment.yaml
+
+    - name: Replace image tag placeholder in backend deployment
+      run: |-
+        sed -i "s|tui-backend:TAG_PLACEHOLDER|tui-backend:${{ github.sha }}|g" ./infra-config/deployments/backend-deployment.yaml
+
     - name: Deploy frontend deployment
       run: |-
         kubectl apply -f ./infra-config/deployments/frontend-deployment.yaml
